@@ -1,7 +1,7 @@
-export class Recipe {
+export class RecipeModel {
   constructor(
     public name: string,
     public description: string,
-    imagePath: string
+    public imagePath: string
   ) {}
 }

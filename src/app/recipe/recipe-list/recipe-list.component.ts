@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RecipeModel } from '../recipe.model';
 
 @Component({
   selector: 'app-recipe-list',
@@ -6,7 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./recipe-list.component.css'],
 })
 export class RecipeListComponent implements OnInit {
-  recipes = [];
+  recipes: RecipeModel[] = [
+    new RecipeModel(
+      'A test Recipe',
+      'This is a test',
+      'https://static.onecms.io/wp-content/uploads/sites/44/2022/03/16/sheet-pan-sweet-potato-fajitas.jpg'
+    ),
+  ];
 
   constructor() {}
 
