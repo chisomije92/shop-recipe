@@ -5,7 +5,7 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
-    <a
+    <!--<a
       href="#"
       class="list-group-item list-group list-group-item-action clearfix p-2 mt-1 border"
       *ngFor="let recipe of recipes"
@@ -22,8 +22,11 @@
           style="max-width: 70px"
         />
       </span>
-    </a>
+    </a>-->
 
-    <app-recipe-item></app-recipe-item>
+    <app-recipe-item
+      *ngFor="let recipeItem of recipes"
+      [recipe]="recipeItem"
+    ></app-recipe-item>
   </div>
 </div>
