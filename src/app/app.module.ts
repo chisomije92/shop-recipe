@@ -9,10 +9,20 @@ import { RecipeItemComponent } from './recipe/recipe-list/recipe-item/recipe-ite
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-edit.component';
 import { RecipeDetailComponent } from './recipe/recipe-detail/recipe-detail.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, RecipeComponent, RecipeListComponent, RecipeItemComponent, ShoppingListComponent, ShoppingEditComponent, RecipeDetailComponent],
-  imports: [BrowserModule],
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    RecipeComponent,
+    RecipeListComponent,
+    RecipeItemComponent,
+    ShoppingListComponent,
+    ShoppingEditComponent,
+    RecipeDetailComponent,
+  ],
+  imports: [BrowserModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],
 })

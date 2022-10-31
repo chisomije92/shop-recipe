@@ -3,15 +3,21 @@
     <form class="row g-2">
       <div class="col-sm-5 form-group">
         <label for="name">Name</label>
-        <input type="text" id="name" class="form-control" />
+        <input type="text" id="name" class="form-control" #nameInputRef />
       </div>
       <div class="col-sm-2 form-group">
         <label for="amount">Amount</label>
-        <input type="number" id="amount" class="form-control" />
+        <input type="number" id="amount" class="form-control" #amountInputRef />
       </div>
       <div class="row g-2">
         <div class="col-xs-12">
-          <button class="btn btn-success me-2" type="submit">Add</button>
+          <button
+            class="btn btn-success me-2"
+            type="submit"
+            (click)="onAddItem()"
+          >
+            Add
+          </button>
           <button class="btn btn-danger me-2" type="submit">Delete</button>
           <button class="btn btn-primary me-2" type="submit">Clear</button>
         </div>
