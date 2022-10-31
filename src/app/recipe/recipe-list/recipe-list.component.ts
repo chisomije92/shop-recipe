@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { RecipeModel } from '../recipe.model';
 
 @Component({
@@ -7,6 +7,7 @@ import { RecipeModel } from '../recipe.model';
   styleUrls: ['./recipe-list.component.css'],
 })
 export class RecipeListComponent implements OnInit {
+  @Output() recipeWasSelected = new EventEmitter<RecipeModel>();
   recipes: RecipeModel[] = [
     new RecipeModel(
       'A test Recipe',
@@ -14,8 +15,8 @@ export class RecipeListComponent implements OnInit {
       'https://static.onecms.io/wp-content/uploads/sites/44/2022/03/16/sheet-pan-sweet-potato-fajitas.jpg'
     ),
     new RecipeModel(
-      'A test Recipe',
-      'This is a test',
+      'Another test Recipe',
+      'This is another test',
       'https://static.onecms.io/wp-content/uploads/sites/44/2022/03/16/sheet-pan-sweet-potato-fajitas.jpg'
     ),
   ];
@@ -23,4 +24,8 @@ export class RecipeListComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  onRecipeSelected(recipe: RecipeModel) {
+    this.recipeWasSelected.emit(recipe);
+  }
 }
