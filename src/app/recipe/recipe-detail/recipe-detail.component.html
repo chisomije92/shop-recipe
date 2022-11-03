@@ -25,7 +25,12 @@
       </button>
       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
         <li>
-          <a class="dropdown-item" href="#">Add ingredients to Shopping list</a>
+          <a
+            class="dropdown-item"
+            style="cursor: pointer"
+            (click)="onAddToShoppingList()"
+            >To Shopping list</a
+          >
         </li>
         <li><a class="dropdown-item" href="#">Edit Recipe</a></li>
         <li><a class="dropdown-item" href="#">Delete Recipe</a></li>
