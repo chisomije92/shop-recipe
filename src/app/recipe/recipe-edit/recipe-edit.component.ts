@@ -26,8 +26,21 @@ export class RecipeEditComponent implements OnInit {
     });
   }
 
+  getControls() {
+    return this.recipeForm.get('ingredients') as FormArray;
+  }
+
   onSubmit() {
     console.log(this.recipeForm);
+  }
+
+  onAddIngredient() {
+    (this.recipeForm.get('ingredients') as FormArray).push(
+      new FormGroup({
+        name: new FormControl(),
+        amount: new FormControl(),
+      })
+    );
   }
 
   private initForm() {
@@ -57,9 +70,5 @@ export class RecipeEditComponent implements OnInit {
       description: new FormControl(recipeDescription),
       ingredients: recipeIngredients,
     });
-  }
-
-  getControls() {
-    return this.recipeForm.get('ingredients') as FormArray;
   }
 }
