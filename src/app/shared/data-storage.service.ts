@@ -9,14 +9,19 @@ import { HttpClient } from '@angular/common/http';
 export class DataStorageService {
   constructor(private http: HttpClient, private recipeService: RecipeService) {}
 
-  storedRecipe() {
+  storeRecipe() {
     const recipes = this.recipeService.getRecipe();
     return this.http.put(
       'https://ng-shop-recipe-90217-default-rtdb.firebaseio.com/recipes.json',
       recipes
     );
-    //.subscribe((response) => {
-    //  console.log(response);
-    //});
+  }
+
+  fetchRecipes() {
+    this.http
+      .get<RecipeModel[]>(
+        'https://ng-shop-recipe-90217-default-rtdb.firebaseio.com/recipes.json'
+      )
+      .subscribe((recipe) => this.recipeService.setRecipe(recipe));
   }
 }
