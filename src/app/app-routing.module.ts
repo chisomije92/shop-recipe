@@ -29,6 +29,7 @@ const appRoutes: Routes = [
 
       {
         path: ':id/edit',
+        resolve: [RecipeResolverService],
         component: RecipeEditComponent,
       },
     ],
