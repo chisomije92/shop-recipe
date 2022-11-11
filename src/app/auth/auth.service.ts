@@ -10,7 +10,7 @@ export interface AuthResponseData {
   idToken: string;
   email: string;
   refreshToken: string;
-  ExpiresIn: string;
+  expiresIn: string;
   localId: string;
   registered?: string;
 }
@@ -63,7 +63,7 @@ export class AuthService {
 
   private handleAuthentication(resData: AuthResponseData) {
     const expirationData = new Date(
-      new Date().getTime() + +resData.ExpiresIn * 1000
+      new Date().getTime() + +resData.expiresIn * 1000
     );
     const user = new User(
       resData.email,
@@ -72,6 +72,30 @@ export class AuthService {
       expirationData
     );
     this.user.next(user);
+    localStorage.setItem('userData', JSON.stringify(user));
+  }
+
+  autoLogin() {
+    const userStringData = localStorage.getItem('userData');
+    if (!userStringData) {
+      return;
+    }
+    const userData: {
+      email: string;
+      id: string;
+      _token: string;
+      _tokenExpirationDate: string;
+    } = JSON.parse(userStringData);
+
+    const loadedUser = new User(
+      userData.email,
+      userData.id,
+      userData._token,
+      new Date(userData._tokenExpirationDate)
+    );
+    if (loadedUser.token) {
+      this.user.next(loadedUser);
+    }
   }
 
   private handleError(errorRes: HttpErrorResponse) {
