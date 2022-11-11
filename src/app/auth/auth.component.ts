@@ -8,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./auth.component.css'],
 })
 export class AuthComponent implements OnInit {
-  isLoginMode: boolean = false;
+  isLoginMode: boolean = true;
+  isLoading: boolean = false;
+  error: string | null = null;
   authForm!: FormGroup;
 
   constructor(private authService: AuthService) {}
@@ -24,9 +26,24 @@ export class AuthComponent implements OnInit {
   onSubmit() {
     if (!this.authForm.valid) return;
     const { email, password } = this.authForm.value;
-    this.authService.signup(email, password).subscribe((res) => {
-      console.log(res);
-    });
+    if (this.isLoginMode) {
+      //implement login
+    } else {
+      this.isLoading = true;
+      this.authService.signup(email, password).subscribe(
+        (res) => {
+          console.log(res);
+          this.isLoading = false;
+        },
+
+        (error) => {
+          console.log(error);
+          this.error = 'An unknown error occurred!';
+          this.isLoading = false;
+        }
+      );
+    }
+
     this.authForm.reset();
   }
 
