@@ -10,7 +10,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   isAuth = false;
-  userSub?: Subscription;
+  userSub!: Subscription;
   constructor(
     private dataStorageService: DataStorageService,
     private authService: AuthService
@@ -33,6 +33,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.userSub?.unsubscribe();
+    this.userSub!.unsubscribe();
   }
 }
