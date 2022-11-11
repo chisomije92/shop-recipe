@@ -1,6 +1,7 @@
-import { AuthService } from './auth.service';
+import { AuthService, AuthResponseData } from './auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-auth',
@@ -25,25 +26,28 @@ export class AuthComponent implements OnInit {
 
   onSubmit() {
     if (!this.authForm.valid) return;
+    let authObs: Observable<AuthResponseData>;
     const { email, password } = this.authForm.value;
     if (this.isLoginMode) {
-      //implement login
+      authObs = this.authService.signIn(email, password);
     } else {
       this.isLoading = true;
-      this.authService.signup(email, password).subscribe(
-        (res) => {
-          console.log(res);
-          this.isLoading = false;
-        },
-
-        (errorResponse) => {
-          console.log(errorResponse);
-          this.error = 'An unknown error occurred!';
-          this.error = errorResponse;
-          this.isLoading = false;
-        }
-      );
+      authObs = this.authService.signup(email, password);
     }
+
+    authObs.subscribe({
+      next: (res) => {
+        console.log(res);
+        this.isLoading = false;
+      },
+
+      error: (errorResponse) => {
+        console.log(errorResponse);
+        this.error = 'An unknown error occurred!';
+        this.error = errorResponse;
+        this.isLoading = false;
+      },
+    });
 
     this.authForm.reset();
   }
