@@ -29,12 +29,11 @@ export class RecipeEditComponent implements OnInit {
     });
   }
 
-  get recipeFormIngredients() {
+  get recipeFormGroup() {
     return this.recipeForm.get('ingredients') as FormArray;
   }
 
   onSubmit() {
-    //const newRecipe = new RecipeModel(this.recipeForm.value.name, this.recipeForm.value.description, this.recipeForm.value.imagePath, this.recipeForm.value.ingredients)
     if (this.editMode) {
       this.recipeService.updateRecipe(this.id, this.recipeForm.value);
     } else {
