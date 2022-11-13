@@ -1,3 +1,4 @@
+import { filter, map } from 'rxjs';
 import { RecipeService } from './../recipe.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
@@ -22,22 +23,26 @@ export class RecipeEditComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
       const recipesLength = this.recipeService.getRecipe().length;
-      this.id =
-        +params['id'] > recipesLength ? recipesLength - 1 : +params['id'];
+      if (+params['id'] >= recipesLength) {
+        this.id = recipesLength - 1;
+        this.router.navigate(['/recipes']);
+      } else {
+        this.id = +params['id'];
+      }
       this.editMode = params['id'] != null;
       this.initForm();
     });
   }
 
   get recipeFormGroup() {
-    return this.recipeForm.get('ingredients') as FormArray;
+    return this.recipeForm?.get('ingredients') as FormArray;
   }
 
   onSubmit() {
     if (this.editMode) {
-      this.recipeService.updateRecipe(this.id, this.recipeForm.value);
+      this.recipeService.updateRecipe(this.id, this.recipeForm?.value);
     } else {
-      this.recipeService.addRecipe(this.recipeForm.value);
+      this.recipeService.addRecipe(this.recipeForm?.value);
     }
     this.onCancel();
   }

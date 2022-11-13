@@ -2,6 +2,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { RecipeModel } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -9,7 +10,7 @@ import { RecipeService } from '../recipe.service';
   styleUrls: ['./recipe-detail.component.css'],
 })
 export class RecipeDetailComponent implements OnInit {
-  recipe!: RecipeModel;
+  recipe?: RecipeModel;
   id!: number;
   constructor(
     private recipeService: RecipeService,
@@ -19,16 +20,27 @@ export class RecipeDetailComponent implements OnInit {
 
   ngOnInit(): void {
     //const id = this.route.snapshot.params['id']
-    this.route.params.subscribe((params: Params) => {
-      const recipesLength = this.recipeService.getRecipe().length;
-      this.id =
-        +params['id'] > recipesLength ? recipesLength - 1 : +params['id'];
-      this.recipe = this.recipeService.getRecipeById(this.id);
-    });
+    this.route.params
+      .pipe(
+        filter((value: Params) => {
+          const recipesLength = this.recipeService.getRecipe().length;
+          if (+value['id'] > recipesLength) {
+            this.router.navigate(['/recipes']);
+            return false;
+          }
+          return true;
+        })
+      )
+      .subscribe((params: Params) => {
+        this.id = +params['id'];
+        this.recipe = this.recipeService.getRecipeById(this.id);
+      });
   }
 
   onAddToShoppingList() {
-    this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);
+    if (this.recipe) {
+      this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);
+    }
   }
 
   onAddRecipe() {
