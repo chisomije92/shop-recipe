@@ -11,32 +11,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/recipes', pathMatch: 'full' },
-  {
-    path: 'recipes',
-    component: RecipeComponent,
-    canActivate: [AuthGuard],
-    children: [
-      {
-        path: '',
-        component: RecipeStartComponent,
-      },
-      {
-        path: 'new',
-        component: RecipeEditComponent,
-      },
-      {
-        path: ':id',
-        component: RecipeDetailComponent,
-        resolve: [RecipeResolverService],
-      },
 
-      {
-        path: ':id/edit',
-        resolve: [RecipeResolverService],
-        component: RecipeEditComponent,
-      },
-    ],
-  },
   { path: 'shopping-list', component: ShoppingListComponent },
   { path: 'auth', component: AuthComponent },
 ];
