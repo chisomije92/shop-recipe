@@ -9,15 +9,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ShoppingListService } from './shopping-list/shopping-list.service';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent],
   imports: [
     BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
     RecipeModule,
