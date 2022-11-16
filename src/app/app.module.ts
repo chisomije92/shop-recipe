@@ -1,3 +1,4 @@
+import { CoreModules } from './core.module';
 import { AuthModule } from './auth/auth.module';
 import { ShoppingListModule } from './shopping-list/shopping-list.module';
 import { RecipeModule } from './recipe/recipe.module';
@@ -20,16 +21,9 @@ import { ShoppingListService } from './shopping-list/shopping-list.service';
     RecipeModule,
     ShoppingListModule,
     AuthModule,
+    CoreModules,
   ],
-  providers: [
-    ShoppingListService,
-    RecipeService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptorService,
-      multi: true,
-    },
-  ],
+
   bootstrap: [AppComponent],
 })
 export class AppModule {}
