@@ -1,8 +1,7 @@
+import { AuthModule } from './auth/auth.module';
 import { ShoppingListModule } from './shopping-list/shopping-list.module';
 import { RecipeModule } from './recipe/recipe.module';
-import { AlertComponent } from './shared/alert/alert.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
-import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { RecipeService } from './recipe/recipe.service';
 import { AppRoutingModule } from './app-routing.module';
 import { NgModule } from '@angular/core';
@@ -12,16 +11,9 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ShoppingListService } from './shopping-list/shopping-list.service';
-import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    AuthComponent,
-    LoadingSpinnerComponent,
-    AlertComponent,
-  ],
+  declarations: [AppComponent, HeaderComponent],
   imports: [
     BrowserModule,
     FormsModule,
@@ -30,6 +22,7 @@ import { AuthComponent } from './auth/auth.component';
     HttpClientModule,
     RecipeModule,
     ShoppingListModule,
+    AuthModule,
   ],
   providers: [
     ShoppingListService,
