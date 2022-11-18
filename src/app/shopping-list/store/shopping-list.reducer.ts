@@ -35,20 +35,22 @@ export function shoppingListReducer(
       return {
         ...state,
         ingredients: state.ingredients.filter((_, igIndex) => {
-          return igIndex !== action.payload;
+          return igIndex !== state.editedItemsIndex;
         }),
       };
     case ShoppingListActions.UPDATE_INGREDIENTS:
-      const ingredient = state.ingredients[action.payload.index];
+      const ingredient = state.ingredients[state.editedItemsIndex];
       const updatedIngredient = {
         ...ingredient,
-        ...action.payload.ingredient,
+        ...action.payload,
       };
       const updatedIngredients = [...state.ingredients];
-      updatedIngredients[action.payload.index] = updatedIngredient;
+      updatedIngredients[state.editedItemsIndex] = updatedIngredient;
       return {
         ...state,
         ingredients: updatedIngredients,
+        editedIngredient: null,
+        editedItemsIndex: -1,
       };
     case ShoppingListActions.START_EDIT:
       return {
@@ -59,12 +61,12 @@ export function shoppingListReducer(
     case ShoppingListActions.STOP_EDIT:
       return {
         ...state,
+        editedIngredient: null,
+        editedItemsIndex: -1,
       };
     default:
       return {
         ...state,
-        editedIngredient: null,
-        editedItemsIndex: -1,
       };
   }
 }
