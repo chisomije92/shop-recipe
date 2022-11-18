@@ -3,6 +3,8 @@ import * as ShoppingListActions from './shopping-list.action';
 
 export interface ShoppingListState {
   ingredients: IngredientsModel[];
+  editedIngredients: IngredientsModel | null;
+  editedItemsIndex: number;
 }
 
 const initialState: ShoppingListState = {
@@ -10,6 +12,8 @@ const initialState: ShoppingListState = {
     new IngredientsModel('Apples', 5),
     new IngredientsModel('Tomatoes', 10),
   ],
+  editedIngredients: null,
+  editedItemsIndex: -1,
 };
 
 export function shoppingListReducer(

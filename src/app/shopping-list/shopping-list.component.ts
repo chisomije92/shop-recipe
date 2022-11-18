@@ -1,3 +1,4 @@
+import { AppState } from './store/index';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IngredientsModel } from '../shared/ingredients.model';
 import { ShoppingListService } from './shopping-list.service';
@@ -15,7 +16,7 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
 
   constructor(
     private slService: ShoppingListService,
-    private store: Store<{ shoppingList: { ingredients: IngredientsModel[] } }>
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
