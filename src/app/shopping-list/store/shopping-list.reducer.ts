@@ -65,8 +65,6 @@ export function shoppingListReducer(
         editedItemsIndex: -1,
       };
     default:
-      return {
-        ...state,
-      };
+      return state;
   }
 }
