@@ -1,7 +1,11 @@
 import { IngredientsModel } from '../../shared/ingredients.model';
 import * as ShoppingListActions from './shopping-list.action';
 
-const initialState = {
+export interface ShoppingListState {
+  ingredients: IngredientsModel[];
+}
+
+const initialState: ShoppingListState = {
   ingredients: [
     new IngredientsModel('Apples', 5),
     new IngredientsModel('Tomatoes', 10),
@@ -9,9 +13,9 @@ const initialState = {
 };
 
 export function shoppingListReducer(
-  state = initialState,
+  state: ShoppingListState = initialState,
   action: ShoppingListActions.AddIngredient
-) {
+): ShoppingListState {
   switch (action.type) {
     case ShoppingListActions.ADD_INGREDIENT:
       return {
