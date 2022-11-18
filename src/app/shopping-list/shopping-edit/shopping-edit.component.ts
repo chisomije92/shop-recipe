@@ -17,24 +17,38 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   subscription?: Subscription;
   editMode = false;
   editedItemsIndex!: number;
-  editedItem?: IngredientsModel;
+  editedItem: IngredientsModel | null = null;
   constructor(
     private slService: ShoppingListService,
     private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
-    this.subscription = this.slService.startedEditing.subscribe(
-      (index: number) => {
-        this.editedItemsIndex = index;
-        this.editMode = true;
-        this.editedItem = this.slService.getIngredient(index);
-        this.slForm.setValue({
-          name: this.editedItem.name,
-          amount: this.editedItem.amount,
-        });
-      }
-    );
+    this.subscription = this.store
+      .select('shoppingList')
+      .subscribe((stateData) => {
+        if (stateData.editedItemsIndex > -1) {
+          this.editMode = true;
+          this.editedItem = stateData.editedIngredient;
+          this.slForm.setValue({
+            name: this.editedItem!.name,
+            amount: this.editedItem!.amount,
+          });
+        } else {
+          this.editMode = false;
+        }
+      });
+    //this.subscription = this.slService.startedEditing.subscribe(
+    //  (index: number) => {
+    //    this.editedItemsIndex = index;
+    //    this.editMode = true;
+    //    this.editedItem = this.slService.getIngredient(index);
+    //    this.slForm.setValue({
+    //      name: this.editedItem.name,
+    //      amount: this.editedItem.amount,
+    //    });
+    //  }
+    //);
   }
   onSubmit(form: NgForm) {
     const value = form.value;
@@ -58,6 +72,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   onClear() {
     this.slForm.reset();
     this.editMode = false;
+    this.store.dispatch(new ShoppingListActions.StopEdit());
   }
 
   onDelete() {
@@ -70,5 +85,6 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();
+    this.store.dispatch(new ShoppingListActions.StopEdit());
   }
 }

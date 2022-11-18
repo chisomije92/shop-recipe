@@ -3,7 +3,7 @@ import * as ShoppingListActions from './shopping-list.action';
 
 export interface ShoppingListState {
   ingredients: IngredientsModel[];
-  editedIngredients: IngredientsModel | null;
+  editedIngredient: IngredientsModel | null;
   editedItemsIndex: number;
 }
 
@@ -12,7 +12,7 @@ const initialState: ShoppingListState = {
     new IngredientsModel('Apples', 5),
     new IngredientsModel('Tomatoes', 10),
   ],
-  editedIngredients: null,
+  editedIngredient: null,
   editedItemsIndex: -1,
 };
 
@@ -50,7 +50,21 @@ export function shoppingListReducer(
         ...state,
         ingredients: updatedIngredients,
       };
+    case ShoppingListActions.START_EDIT:
+      return {
+        ...state,
+        editedItemsIndex: action.payload,
+        editedIngredient: { ...state.ingredients[action.payload] },
+      };
+    case ShoppingListActions.STOP_EDIT:
+      return {
+        ...state,
+      };
     default:
-      return state;
+      return {
+        ...state,
+        editedIngredient: null,
+        editedItemsIndex: -1,
+      };
   }
 }
