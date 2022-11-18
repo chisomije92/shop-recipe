@@ -28,7 +28,7 @@ export class RecipeService {
 
   addIngredientsToShoppingList(ingredients: IngredientsModel[]) {
     // this.slService.addIngredients(ingredients);
-    this.store.dispatch(new ShoppingListActions.AddIngredientS(ingredients));
+    this.store.dispatch(new ShoppingListActions.AddIngredients(ingredients));
   }
 
   getRecipeById(index: number) {
