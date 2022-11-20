@@ -26,6 +26,9 @@ export class AuthComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+    this.store.select('auth').subscribe((authState) => {
+      (this.isLoading = authState.loading), (this.error = authState.authError);
+    });
   }
 
   onSwitchMode() {
@@ -45,19 +48,19 @@ export class AuthComponent implements OnInit {
       authObs = this.authService.signup(email, password);
     }
 
-    authObs!.subscribe({
-      next: (res) => {
-        console.log(res);
-        this.isLoading = false;
-        this.router.navigate(['/recipes']);
-      },
+    //authObs!.subscribe({
+    //  next: (res) => {
+    //    console.log(res);
+    //    this.isLoading = false;
+    //    this.router.navigate(['/recipes']);
+    //  },
 
-      error: (errorResponse) => {
-        console.log(errorResponse);
-        this.error = errorResponse;
-        this.isLoading = false;
-      },
-    });
+    //  error: (errorResponse) => {
+    //    console.log(errorResponse);
+    //    this.error = errorResponse;
+    //    this.isLoading = false;
+    //  },
+    //});
 
     this.authForm.reset();
   }
