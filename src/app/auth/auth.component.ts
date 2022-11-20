@@ -3,8 +3,8 @@ import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { AuthService, AuthResponseData } from './auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import * as AuthActions from './store/auth.actions';
 
 @Component({
@@ -12,11 +12,12 @@ import * as AuthActions from './store/auth.actions';
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.css'],
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
   isLoginMode: boolean = true;
   isLoading: boolean = false;
   error: string | null = null;
   authForm!: FormGroup;
+  storeSub?: Subscription;
 
   constructor(
     private authService: AuthService,
@@ -26,7 +27,7 @@ export class AuthComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.store.select('auth').subscribe((authState) => {
+    this.storeSub = this.store.select('auth').subscribe((authState) => {
       (this.isLoading = authState.loading), (this.error = authState.authError);
     });
   }
@@ -37,15 +38,13 @@ export class AuthComponent implements OnInit {
 
   onSubmit() {
     if (!this.authForm.valid) return;
-    let authObs: Observable<AuthResponseData>;
     const { email, password } = this.authForm.value;
     if (this.isLoginMode) {
       this.isLoading = true;
-      //authObs = this.authService.signIn(email, password);
       this.store.dispatch(new AuthActions.LoginStart({ email, password }));
     } else {
       this.isLoading = true;
-      authObs = this.authService.signup(email, password);
+      this.store.dispatch(new AuthActions.SignupStart({ email, password }));
     }
 
     //authObs!.subscribe({
@@ -77,5 +76,9 @@ export class AuthComponent implements OnInit {
         Validators.minLength(6),
       ]),
     });
+  }
+
+  ngOnDestroy(): void {
+    this.storeSub?.unsubscribe();
   }
 }
