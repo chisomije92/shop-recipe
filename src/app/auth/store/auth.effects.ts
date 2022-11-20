@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import * as AuthActions from './auth.actions';
-import { switchMap, catchError, map, of, Observable } from 'rxjs';
+import { switchMap, catchError, map, of, Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 export interface AuthResponseData {
   kind: string;
@@ -16,7 +17,7 @@ export interface AuthResponseData {
 }
 @Injectable()
 export class AuthEffects {
-  authLogin$ = createEffect((): any => {
+  authLogin$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AuthActions.LOGIN_START),
       switchMap((authData: AuthActions.LoginStart) => {
@@ -34,23 +35,53 @@ export class AuthEffects {
               const expirationDate = new Date(
                 new Date().getTime() + +resData.expiresIn * 1000
               );
-              return of(
-                new AuthActions.Login({
-                  email: resData.email,
-                  userId: resData.localId,
-                  token: resData.idToken,
-                  expirationDate: expirationDate,
-                })
-              );
+              return new AuthActions.Login({
+                email: resData.email,
+                userId: resData.localId,
+                token: resData.idToken,
+                expirationDate: expirationDate,
+              });
             }),
 
-            catchError((error) => {
-              return of();
+            catchError((errorRes) => {
+              let errorMsg = 'An Unknown Error occurred!';
+              if (!errorRes.error || !errorRes.error.error) {
+                return of(new AuthActions.LoginFail(errorMsg));
+              }
+
+              switch (errorRes.error.error.message) {
+                case 'EMAIL_EXISTS':
+                  errorMsg = 'This email exists already!';
+                  break;
+                case 'INVALID_PASSWORD':
+                  errorMsg = 'Credentials are incorrect!';
+                  break;
+                case 'USER_DISABLED':
+                  errorMsg = 'Invalid account: account has been deleted!';
+                  break;
+              }
+              return of(new AuthActions.LoginFail(errorMsg));
             })
           );
       })
     );
   });
 
-  constructor(private actions$: Actions, private http: HttpClient) {}
+  authSuccess$ = createEffect(
+    (): any => {
+      return this.actions$.pipe(
+        ofType(AuthActions.LOGIN),
+        tap(() => {
+          this.router.navigate(['/']);
+        })
+      );
+    },
+    { dispatch: false }
+  );
+
+  constructor(
+    private actions$: Actions,
+    private http: HttpClient,
+    private router: Router
+  ) {}
 }
