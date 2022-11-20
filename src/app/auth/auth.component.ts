@@ -1,10 +1,8 @@
 import { AppState } from './../store-root/index';
 import { Store } from '@ngrx/store';
-import { Router } from '@angular/router';
-import { AuthService, AuthResponseData } from './auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import * as AuthActions from './store/auth.actions';
 
 @Component({
@@ -19,11 +17,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   authForm!: FormGroup;
   storeSub?: Subscription;
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private store: Store<AppState>
-  ) {}
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -46,20 +40,6 @@ export class AuthComponent implements OnInit, OnDestroy {
       this.isLoading = true;
       this.store.dispatch(new AuthActions.SignupStart({ email, password }));
     }
-
-    //authObs!.subscribe({
-    //  next: (res) => {
-    //    console.log(res);
-    //    this.isLoading = false;
-    //    this.router.navigate(['/recipes']);
-    //  },
-
-    //  error: (errorResponse) => {
-    //    console.log(errorResponse);
-    //    this.error = errorResponse;
-    //    this.isLoading = false;
-    //  },
-    //});
 
     this.authForm.reset();
   }
