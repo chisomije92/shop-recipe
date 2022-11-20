@@ -1,4 +1,3 @@
-import { ShoppingListActions } from './../shopping-list/store/shopping-list.action';
 import { authReducer, authState } from './../auth/store/auth.reducer';
 import {
   ShoppingListState,
@@ -13,7 +12,7 @@ export interface AppState {
   auth: authState;
 }
 
-export const reducers: ActionReducerMap<AppState, ShoppingListActions> = {
+export const reducers: ActionReducerMap<AppState, any> = {
   shoppingList: shoppingListReducer,
   auth: authReducer,
 };

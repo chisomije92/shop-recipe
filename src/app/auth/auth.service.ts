@@ -1,9 +1,11 @@
+import { AppState } from './../store-root/index';
 import { Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError, tap, BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from './user.model';
+import { Store } from '@ngrx/store';
 
 export interface AuthResponseData {
   kind: string;
@@ -20,7 +22,11 @@ export class AuthService {
   user = new BehaviorSubject<User | null>(null);
   timer?: ReturnType<typeof setTimeout>;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private store: Store<AppState>
+  ) {}
 
   signup(email: string, password: string) {
     return this.http
@@ -77,7 +83,8 @@ export class AuthService {
       resData.idToken,
       expirationData
     );
-    this.user.next(user);
+    //this.user.next(user);
+
     this.autoLogout(+resData.expiresIn * 1000);
     localStorage.setItem('userData', JSON.stringify(user));
   }
