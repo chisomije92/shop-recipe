@@ -17,9 +17,9 @@ export interface AuthResponseData {
 }
 @Injectable()
 export class AuthEffects {
-  authSignUp$ = createEffect(() => {
-    return this.actions$.pipe();
-  });
+  //authSignUp$ =createEffect(() => {
+  //  return this.actions$.pipe
+  //})
   authLogin$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AuthActions.LOGIN_START),
@@ -38,7 +38,7 @@ export class AuthEffects {
               const expirationDate = new Date(
                 new Date().getTime() + +resData.expiresIn * 1000
               );
-              return new AuthActions.AuthenticateSuccess({
+              return new AuthActions.AuthenticationSuccess({
                 email: resData.email,
                 userId: resData.localId,
                 token: resData.idToken,
@@ -49,7 +49,7 @@ export class AuthEffects {
             catchError((errorRes) => {
               let errorMsg = 'An Unknown Error occurred!';
               if (!errorRes.error || !errorRes.error.error) {
-                return of(new AuthActions.AuthenticateFail(errorMsg));
+                return of(new AuthActions.AuthenticationFail(errorMsg));
               }
 
               switch (errorRes.error.error.message) {
@@ -63,7 +63,7 @@ export class AuthEffects {
                   errorMsg = 'Invalid account: account has been deleted!';
                   break;
               }
-              return of(new AuthActions.AuthenticateFail(errorMsg));
+              return of(new AuthActions.AuthenticationFail(errorMsg));
             })
           );
       })
@@ -73,7 +73,7 @@ export class AuthEffects {
   authSuccess$ = createEffect(
     (): any => {
       return this.actions$.pipe(
-        ofType(AuthActions.AUTHENTICATE_SUCCESS),
+        ofType(AuthActions.AUTHENTICATION_SUCCESS),
         tap(() => {
           this.router.navigate(['/']);
         })

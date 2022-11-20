@@ -86,7 +86,7 @@ export class AuthService {
     );
     //this.user.next(user);
     this.store.dispatch(
-      new AuthActions.AuthenticateSuccess({
+      new AuthActions.AuthenticationSuccess({
         email: resData.email,
         userId: resData.localId,
         token: resData.idToken,
@@ -124,7 +124,7 @@ export class AuthService {
     if (loadedUser.token) {
       //this.user.next(loadedUser);
       this.store.dispatch(
-        new AuthActions.AuthenticateSuccess({
+        new AuthActions.AuthenticationSuccess({
           email: loadedUser.email,
           userId: loadedUser.id,
           token: loadedUser.token,
