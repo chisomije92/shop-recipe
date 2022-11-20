@@ -1,4 +1,4 @@
-import { AppState } from './../store/index';
+import { AppState } from '../../store-root/index';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';

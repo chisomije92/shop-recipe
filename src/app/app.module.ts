@@ -1,4 +1,4 @@
-import { reducers } from './shopping-list/store/index';
+import { reducers } from './store-root/index';
 import { CoreModules } from './core.module';
 import { AuthModule } from './auth/auth.module';
 import { ShoppingListModule } from './shopping-list/shopping-list.module';

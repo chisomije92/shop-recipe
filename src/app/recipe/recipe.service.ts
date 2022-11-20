@@ -1,4 +1,4 @@
-import { AppState } from './../shopping-list/store/index';
+import { AppState } from '../store-root/index';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';

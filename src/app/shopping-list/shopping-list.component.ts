@@ -1,4 +1,4 @@
-import { AppState } from './store/index';
+import { AppState } from '../store-root/index';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IngredientsModel } from '../shared/ingredients.model';
 import { ShoppingListService } from './shopping-list.service';
