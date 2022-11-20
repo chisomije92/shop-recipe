@@ -20,7 +20,7 @@ export interface AuthResponseData {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   //user = new BehaviorSubject<User | null>(null);
-  timer?: ReturnType<typeof setTimeout>;
+  timer?: ReturnType<typeof setTimeout> | null;
 
   constructor(
     private http: HttpClient,
@@ -100,6 +100,19 @@ export class AuthService {
     this.timer = setTimeout(() => {
       this.logout();
     }, expirationDuration);
+  }
+
+  setLogoutTimer(expirationDuration: number) {
+    this.timer = setTimeout(() => {
+      this.store.dispatch(new AuthActions.Logout());
+    }, expirationDuration);
+  }
+
+  clearLogoutTimer() {
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
   }
 
   autoLogin() {
