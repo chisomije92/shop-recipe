@@ -1,8 +1,11 @@
+import { AppState } from './../store-root/index';
+import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { AuthService, AuthResponseData } from './auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import * as AuthActions from './store/auth.actions';
 
 @Component({
   selector: 'app-auth',
@@ -15,7 +18,11 @@ export class AuthComponent implements OnInit {
   error: string | null = null;
   authForm!: FormGroup;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private store: Store<AppState>
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -31,13 +38,14 @@ export class AuthComponent implements OnInit {
     const { email, password } = this.authForm.value;
     if (this.isLoginMode) {
       this.isLoading = true;
-      authObs = this.authService.signIn(email, password);
+      //authObs = this.authService.signIn(email, password);
+      this.store.dispatch(new AuthActions.LoginStart({ email, password }));
     } else {
       this.isLoading = true;
       authObs = this.authService.signup(email, password);
     }
 
-    authObs.subscribe({
+    authObs!.subscribe({
       next: (res) => {
         console.log(res);
         this.isLoading = false;
