@@ -86,6 +86,7 @@ export class AuthEffects {
       })
     );
   });
+
   authLogin$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AuthActions.LOGIN_START),
@@ -116,7 +117,7 @@ export class AuthEffects {
   });
 
   authRedirect$ = createEffect(
-    (): any => {
+    () => {
       return this.actions$.pipe(
         ofType(AuthActions.AUTHENTICATION_SUCCESS),
         tap(() => {
