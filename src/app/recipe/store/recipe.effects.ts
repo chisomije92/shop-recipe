@@ -18,8 +18,15 @@ export class RecipeEffects {
         );
       }),
       map((recipes) => {
-        console.log(recipes);
-        return new RecipesActions.setRecipes(recipes);
+        return recipes.map((recipe) => {
+          return {
+            ...recipe,
+            ingredients: recipe.ingredients ? recipe.ingredients : [],
+          };
+        });
+      }),
+      map((recipes) => {
+        return new RecipesActions.SetRecipes(recipes);
       })
     );
   });
