@@ -1,3 +1,4 @@
+import { RecipeEffects } from './recipe/store/recipe.effects';
 import { reducers } from './store-root/index';
 import { CoreModules } from './core.module';
 import { AuthModule } from './auth/auth.module';
@@ -24,7 +25,7 @@ import { AuthEffects } from './auth/store/auth.effects';
     AuthModule,
     CoreModules,
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, RecipeEffects]),
   ],
 
   bootstrap: [AppComponent],

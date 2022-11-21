@@ -14,7 +14,7 @@ export function recipeReducer(
   action: RecipeActions.RecipeActions
 ) {
   switch (action.type) {
-    case RecipeActions.SET_RECIPE:
+    case RecipeActions.SET_RECIPES:
       return {
         ...state,
         recipes: [...action.payload],
