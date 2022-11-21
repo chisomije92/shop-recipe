@@ -1,8 +1,10 @@
+import { AppState } from './../../store-root/index';
+import { Store } from '@ngrx/store';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { RecipeModel } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
-import { filter } from 'rxjs';
+import { filter, map } from 'rxjs';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -15,25 +17,36 @@ export class RecipeDetailComponent implements OnInit {
   constructor(
     private recipeService: RecipeService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
     //const id = this.route.snapshot.params['id']
     this.route.params
-      .pipe(
-        filter((value: Params) => {
-          const recipesLength = this.recipeService.getRecipe().length;
-          if (+value['id'] > recipesLength) {
-            this.router.navigate(['/recipes']);
-            return false;
-          }
-          return true;
-        })
-      )
+      //.pipe(
+      //  filter((value: Params) => {
+      //    const recipesLength = this.recipeService.getRecipe().length;
+      //    if (+value['id'] > recipesLength) {
+      //      this.router.navigate(['/recipes']);
+      //      return false;
+      //    }
+      //    return true;
+      //  })
+      //)
       .subscribe((params: Params) => {
         this.id = +params['id'];
-        this.recipe = this.recipeService.getRecipeById(this.id);
+        //this.recipe = this.recipeService.getRecipeById(this.id);
+        this.store
+          .select('recipes')
+          .pipe(
+            map((recipeState) =>
+              recipeState.recipes.find((recipe, index) => index === this.id)
+            )
+          )
+          .subscribe((recipe) => {
+            this.recipe = recipe;
+          });
       });
   }
 
