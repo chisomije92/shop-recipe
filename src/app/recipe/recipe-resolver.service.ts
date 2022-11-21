@@ -1,4 +1,4 @@
-import { take, map, switchMap, of } from 'rxjs';
+import { take, map, switchMap, of, filter, tap } from 'rxjs';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { RecipeService } from './recipe.service';
@@ -9,6 +9,8 @@ import {
   Resolve,
   RouterStateSnapshot,
   ActivatedRouteSnapshot,
+  Router,
+  createUrlTreeFromSnapshot,
 } from '@angular/router';
 import * as RecipesActions from './store/recipe.action';
 import { AppState } from '../store-root';
@@ -19,19 +21,22 @@ export class RecipeResolverService implements Resolve<RecipeModel[]> {
     private dataStorageService: DataStorageService,
     private recipeService: RecipeService,
     private store: Store<AppState>,
-    private action$: Actions
+    private action$: Actions,
+    private router: Router
   ) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    //const recipes = this.recipeService.getRecipe();
-    //if (recipes.length === 0) {
-    //  return this.dataStorageService.fetchRecipes();
-    //} else {
-    //  return recipes;
-    //}
     return this.store.select('recipes').pipe(
       take(1),
-      map((recipeState) => recipeState.recipes),
+      map((recipeState) => {
+        return recipeState.recipes;
+      }),
+
+      tap((recipe) => {
+        if (+route.params['id'] > recipe.length) {
+          this.router.navigate(['recipes']);
+        }
+      }),
       switchMap((recipes) => {
         if (recipes.length === 0) {
           this.store.dispatch(new RecipesActions.FetchRecipes());

@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { filter, map, Subscription } from 'rxjs';
+import { filter, map, Subscription, switchMap } from 'rxjs';
 import { RecipeService } from './../recipe.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -27,15 +27,14 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
-      //const recipesLength = this.recipeService.getRecipe().length;
-      //if (+params['id'] >= recipesLength) {
-      //  this.id = recipesLength - 1;
-      //  this.router.navigate(['/recipes']);
-      //} else {
       this.id = +params['id'];
-      //}
       this.editMode = params['id'] != null;
       this.initForm();
+      this.store.select('recipes').pipe(
+        map((recipeState) => {
+          return recipeState.recipes.find((recipe, index) => index === this.id);
+        })
+      );
     });
   }
 

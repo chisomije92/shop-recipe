@@ -6,6 +6,7 @@ import { IngredientsModel } from '../shared/ingredients.model';
 import { ShoppingListService } from '../shopping-list/shopping-list.service';
 import { RecipeModel } from './recipe.model';
 import * as ShoppingListActions from '../shopping-list/store/shopping-list.action';
+import * as RecipeActions from './store/recipe.action';
 
 @Injectable()
 export class RecipeService {
@@ -24,7 +25,8 @@ export class RecipeService {
   }
 
   getRecipe() {
-    return this.recipes.slice();
+    //return this.recipes.slice();
+    this.store.dispatch(new RecipeActions.FetchRecipes());
   }
 
   addIngredientsToShoppingList(ingredients: IngredientsModel[]) {

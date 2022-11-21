@@ -3,9 +3,9 @@ import { Store } from '@ngrx/store';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { RecipeModel } from '../recipe.model';
-import { RecipeService } from '../recipe.service';
 import { map } from 'rxjs';
 import * as RecipeActions from './../store/recipe.action';
+import * as ShoppingListActions from './../../shopping-list/store/shopping-list.action';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -16,7 +16,6 @@ export class RecipeDetailComponent implements OnInit {
   recipe?: RecipeModel;
   id!: number;
   constructor(
-    private recipeService: RecipeService,
     private route: ActivatedRoute,
     private router: Router,
     private store: Store<AppState>
@@ -26,15 +25,16 @@ export class RecipeDetailComponent implements OnInit {
     //const id = this.route.snapshot.params['id']
     this.route.params
       //.pipe(
-      //  filter((value: Params) => {
-      //    const recipesLength = this.recipeService.getRecipe().length;
-      //    if (+value['id'] > recipesLength) {
-      //      this.router.navigate(['/recipes']);
-      //      return false;
-      //    }
-      //    return true;
-      //  })
+      //filter((value: Params) => {
+      //  const recipesLength = this.recipeService.getRecipe().length;
+      //  if (+value['id'] > recipesLength) {
+      //    this.router.navigate(['/recipes']);
+      //    return false;
+      //  }
+      //  return true;
+      //})
       //)
+
       .subscribe((params: Params) => {
         this.id = +params['id'];
         //this.recipe = this.recipeService.getRecipeById(this.id);
@@ -52,8 +52,13 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   onAddToShoppingList() {
+    //if (this.recipe) {
+    //  this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);
+    //}
     if (this.recipe) {
-      this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);
+      this.store.dispatch(
+        new ShoppingListActions.AddIngredients(this.recipe.ingredients)
+      );
     }
   }
 
