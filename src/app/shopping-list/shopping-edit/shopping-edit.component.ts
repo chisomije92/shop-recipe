@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { IngredientsModel } from 'src/app/shared/ingredients.model';
-import { ShoppingListService } from '../shopping-list.service';
 import * as ShoppingListActions from '../store/shopping-list.action';
 
 @Component({
@@ -18,10 +17,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   editMode = false;
   editedItemsIndex!: number;
   editedItem: IngredientsModel | null = null;
-  constructor(
-    private slService: ShoppingListService,
-    private store: Store<AppState>
-  ) {}
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
     this.subscription = this.store
@@ -38,28 +34,15 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
           this.editMode = false;
         }
       });
-    //this.subscription = this.slService.startedEditing.subscribe(
-    //  (index: number) => {
-    //    this.editedItemsIndex = index;
-    //    this.editMode = true;
-    //    this.editedItem = this.slService.getIngredient(index);
-    //    this.slForm.setValue({
-    //      name: this.editedItem.name,
-    //      amount: this.editedItem.amount,
-    //    });
-    //  }
-    //);
   }
   onSubmit(form: NgForm) {
     const value = form.value;
     const newIngredient = new IngredientsModel(value.name, value.amount);
     if (this.editMode) {
-      //this.slService.updateIngredient(this.editedItemsIndex, newIngredient);
       this.store.dispatch(
         new ShoppingListActions.UpdateIngredients(newIngredient)
       );
     } else {
-      //this.slService.addIngredient(newIngredient);
       this.store.dispatch(new ShoppingListActions.AddIngredient(newIngredient));
     }
     form.reset();
@@ -73,7 +56,6 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   }
 
   onDelete() {
-    // this.slService.deleteIngredient(this.editedItemsIndex);
     this.store.dispatch(new ShoppingListActions.DeleteIngredients());
     this.onClear();
   }

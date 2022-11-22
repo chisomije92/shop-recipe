@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { IngredientsModel } from '../shared/ingredients.model';
-import { ShoppingListService } from '../shopping-list/shopping-list.service';
 import { RecipeModel } from './recipe.model';
 import * as ShoppingListActions from '../shopping-list/store/shopping-list.action';
 import * as RecipeActions from './store/recipe.action';
@@ -14,10 +13,7 @@ export class RecipeService {
 
   private recipes: RecipeModel[] = [];
 
-  constructor(
-    private slService: ShoppingListService,
-    private store: Store<AppState>
-  ) {}
+  constructor(private store: Store<AppState>) {}
 
   setRecipe(recipes: RecipeModel[]) {
     this.recipes = recipes;
