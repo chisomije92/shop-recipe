@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { RecipeModel } from '../recipe.model';
-import { map } from 'rxjs';
+import { map, tap } from 'rxjs';
 import * as RecipeActions from './../store/recipe.action';
 import * as ShoppingListActions from './../../shopping-list/store/shopping-list.action';
 
@@ -41,9 +41,15 @@ export class RecipeDetailComponent implements OnInit {
         this.store
           .select('recipes')
           .pipe(
+            //map((recipeState) => recipeState),
             map((recipeState) =>
               recipeState.recipes.find((recipe, index) => index === this.id)
-            )
+            ),
+            tap((recipe) => {
+              if (!recipe) {
+                this.router.navigate(['recipes']);
+              }
+            })
           )
           .subscribe((recipe) => {
             this.recipe = recipe;
