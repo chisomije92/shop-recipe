@@ -3,9 +3,6 @@
     <div *ngIf="isLoading" class="text-center">
       <app-loading-spinner></app-loading-spinner>
     </div>
-    <!--<div class="alert alert-danger" *ngIf="error && !isLoading">
-      <p>{{ error }}</p>
-    </div>-->
     <app-alert
       [message]="error"
       *ngIf="error"
