@@ -1,0 +1,6 @@
+[build]
+  command = "ng build --configuration production && ng run shop-recipe:serverless:production"
+  publish = "dist/shop-recipe/browser"
+  targetPort = "4200"
+[[plugins]]
+  package = "@netlify/plugin-angular-universal"
