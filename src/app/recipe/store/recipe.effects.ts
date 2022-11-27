@@ -1,3 +1,4 @@
+import { selectRecipes } from './recipe.selectors';
 import { AppState } from './../../store-root/index';
 import { Store } from '@ngrx/store';
 import { HttpClient } from '@angular/common/http';
@@ -13,12 +14,12 @@ export class RecipeEffects {
   storeRecipe$ = createEffect(
     () => {
       return this.action$.pipe(
-        ofType(RecipesActions.STORE_RECIPES),
-        withLatestFrom(this.store.select('recipes')),
-        switchMap(([actionData, recipeState]) => {
+        ofType(RecipesActions.storeRecipes),
+        withLatestFrom(this.store.select(selectRecipes)),
+        switchMap((recipes) => {
           return this.http.put(
             'https://ng-shop-recipe-90217-default-rtdb.firebaseio.com/recipes.json',
-            recipeState.recipes
+            recipes
           );
         })
       );
@@ -28,7 +29,7 @@ export class RecipeEffects {
 
   fetchRecipes$ = createEffect(() => {
     return this.action$.pipe(
-      ofType(RecipesActions.FETCH_RECIPES),
+      ofType(RecipesActions.fetchRecipes),
       switchMap(() => {
         return this.http.get<RecipeModel[]>(
           'https://ng-shop-recipe-90217-default-rtdb.firebaseio.com/recipes.json'
@@ -43,7 +44,7 @@ export class RecipeEffects {
         });
       }),
       map((recipes) => {
-        return new RecipesActions.SetRecipes(recipes);
+        return RecipesActions.setRecipes({ recipes });
       })
     );
   });

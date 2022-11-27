@@ -13,15 +13,13 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class AppComponent {
   constructor(
-    private authService: AuthService,
     private store: Store<AppState>,
     @Inject(PLATFORM_ID) private platformId: any
   ) {}
 
   ngOnInit(): void {
-    //this.authService.autoLogin();
     if (isPlatformBrowser(this.platformId)) {
-      this.store.dispatch(new AuthActions.AutoLogin());
+      this.store.dispatch(AuthActions.autoLogin());
     }
   }
 }

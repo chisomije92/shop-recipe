@@ -1,4 +1,5 @@
-import { take, map, switchMap, of, filter, tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { take, map, switchMap, of } from 'rxjs';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { RecipeModel } from './recipe.model';
@@ -13,7 +14,11 @@ import { AppState } from '../store-root';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeResolverService implements Resolve<RecipeModel[]> {
-  constructor(private store: Store<AppState>, private action$: Actions) {}
+  constructor(
+    private store: Store<AppState>,
+    private action$: Actions,
+    private http: HttpClient
+  ) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.store.select('recipes').pipe(
@@ -23,8 +28,16 @@ export class RecipeResolverService implements Resolve<RecipeModel[]> {
       }),
       switchMap((recipes) => {
         if (recipes.length === 0) {
-          this.store.dispatch(new RecipesActions.FetchRecipes());
-          return this.action$.pipe(ofType(RecipesActions.SET_RECIPES), take(1));
+          this.store.dispatch(RecipesActions.fetchRecipes());
+          return this.action$.pipe(
+            ofType(RecipesActions.setRecipes),
+            switchMap(() => {
+              return this.http.get<RecipeModel[]>(
+                'https://ng-shop-recipe-90217-default-rtdb.firebaseio.com/recipes.json'
+              );
+            }),
+            take(1)
+          );
         } else {
           return of(recipes);
         }

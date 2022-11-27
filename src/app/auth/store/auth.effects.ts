@@ -29,7 +29,7 @@ const handleAuthentication = (resData: AuthResponseData) => {
     expirationDate
   );
   localStorage.setItem('userData', JSON.stringify(user));
-  return new AuthActions.AuthenticationSuccess({
+  return AuthActions.authenticationSuccess({
     email: resData.email,
     userId: resData.localId,
     token: resData.idToken,
@@ -41,7 +41,7 @@ const handleAuthentication = (resData: AuthResponseData) => {
 const handleError = (errorRes: HttpErrorResponse) => {
   let errorMsg = 'An Unknown Error occurred!';
   if (!errorRes.error || !errorRes.error.error) {
-    return of(new AuthActions.AuthenticationFail(errorMsg));
+    return of(AuthActions.authenticationFail({ error: errorMsg }));
   }
 
   switch (errorRes.error.error.message) {
@@ -55,20 +55,21 @@ const handleError = (errorRes: HttpErrorResponse) => {
       errorMsg = 'Invalid account: account has been deleted!';
       break;
   }
-  return of(new AuthActions.AuthenticationFail(errorMsg));
+  return of(AuthActions.authenticationFail({ error: errorMsg }));
 };
+
 @Injectable()
 export class AuthEffects {
   authSignUp$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(AuthActions.SIGNUP_START),
-      switchMap((signupAction: AuthActions.SignupStart) => {
+      ofType(AuthActions.signupStart),
+      switchMap((signupAction) => {
         return this.http
           .post<AuthResponseData>(
             `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.api}`,
             {
-              email: signupAction.payload.email,
-              password: signupAction.payload.password,
+              email: signupAction.email,
+              password: signupAction.password,
               returnSecureToken: true,
             }
           )
@@ -90,14 +91,14 @@ export class AuthEffects {
 
   authLogin$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(AuthActions.LOGIN_START),
-      switchMap((authData: AuthActions.LoginStart) => {
+      ofType(AuthActions.loginStart),
+      switchMap((authData) => {
         return this.http
           .post<AuthResponseData>(
             `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.api}`,
             {
-              email: authData.payload.email,
-              password: authData.payload.password,
+              email: authData.email,
+              password: authData.password,
               returnSecureToken: true,
             }
           )
@@ -120,10 +121,10 @@ export class AuthEffects {
   authRedirect$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(AuthActions.AUTHENTICATION_SUCCESS),
-        tap((authSuccessAction: AuthActions.AuthenticationSuccess) => {
-          if (authSuccessAction.payload.redirect) {
-            this.router.navigate(['/']);
+        ofType(AuthActions.authenticationSuccess),
+        tap((authSuccessAction) => {
+          if (authSuccessAction.redirect) {
+            this.router.navigate(['/recipes']);
           }
         })
       );
@@ -133,7 +134,7 @@ export class AuthEffects {
 
   autoLogin$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(AuthActions.AUTO_LOGIN),
+      ofType(AuthActions.autoLogin),
 
       map(() => {
         const userStringData = localStorage.getItem('userData');
@@ -159,7 +160,7 @@ export class AuthEffects {
             new Date().getTime();
 
           this.authService.setLogoutTimer(expirationDuration);
-          return new AuthActions.AuthenticationSuccess({
+          return AuthActions.authenticationSuccess({
             email: loadedUser.email,
             userId: loadedUser.id,
             token: loadedUser.token,
@@ -175,7 +176,7 @@ export class AuthEffects {
   authLogout$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(AuthActions.LOGOUT),
+        ofType(AuthActions.logout),
         tap(() => {
           this.authService.clearLogoutTimer();
           localStorage.removeItem('userData');
