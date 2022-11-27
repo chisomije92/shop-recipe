@@ -669,7 +669,7 @@ class AuthEffects {
         this.authRedirect$ = (0,_ngrx_effects__WEBPACK_IMPORTED_MODULE_5__.createEffect)(() => {
             return this.actions$.pipe((0,_ngrx_effects__WEBPACK_IMPORTED_MODULE_5__.ofType)(_auth_actions__WEBPACK_IMPORTED_MODULE_1__.authenticationSuccess), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.tap)((authSuccessAction) => {
                 if (authSuccessAction.redirect) {
-                    this.router.navigate(['/recipes']);
+                    this.router.navigate(['/']);
                 }
             }));
         }, { dispatch: false });
