@@ -35,9 +35,11 @@ export class AuthComponent implements OnInit, OnDestroy {
     const { email, password } = this.authForm.value;
     if (this.isLoginMode) {
       this.isLoading = true;
+      //this.store.dispatch(new AuthActions.LoginStart({ email, password }));
       this.store.dispatch(AuthActions.loginStart({ email, password }));
     } else {
       this.isLoading = true;
+      //this.store.dispatch(new AuthActions.SignupStart({ email, password }));
       this.store.dispatch(AuthActions.signupStart({ email, password }));
     }
 
@@ -45,6 +47,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   onHandleError() {
+    //this.store.dispatch(new AuthActions.ClearError());
     this.store.dispatch(AuthActions.clearError());
   }
 

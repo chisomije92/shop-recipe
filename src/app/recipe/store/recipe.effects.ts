@@ -1,9 +1,8 @@
-import { selectRecipes } from './recipe.selectors';
 import { AppState } from './../../store-root/index';
 import { Store } from '@ngrx/store';
 import { HttpClient } from '@angular/common/http';
 import { RecipeModel } from './../recipe.model';
-import { switchMap, map, withLatestFrom } from 'rxjs';
+import { switchMap, map, withLatestFrom, of } from 'rxjs';
 
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import * as RecipesActions from './recipe.action';
@@ -14,12 +13,14 @@ export class RecipeEffects {
   storeRecipe$ = createEffect(
     () => {
       return this.action$.pipe(
+        //ofType(RecipesActions.STORE_RECIPES),
         ofType(RecipesActions.storeRecipes),
-        withLatestFrom(this.store.select(selectRecipes)),
-        switchMap((recipes) => {
+        withLatestFrom(this.store.select('recipes')),
+        switchMap(([actionData, recipeState]) => {
+          console.log(recipeState);
           return this.http.put(
             'https://ng-shop-recipe-90217-default-rtdb.firebaseio.com/recipes.json',
-            recipes
+            recipeState.recipes
           );
         })
       );
