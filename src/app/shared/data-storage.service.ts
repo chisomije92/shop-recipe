@@ -40,8 +40,7 @@ export class DataStorageService {
           });
         }),
         tap((recipes) => {
-          //this.recipeService.setRecipe(recipes);
-          this.store.dispatch(new RecipeActions.SetRecipes(recipes));
+          this.store.dispatch(RecipeActions.setRecipes({ recipes }));
         })
       );
   }

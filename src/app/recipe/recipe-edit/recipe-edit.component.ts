@@ -1,6 +1,5 @@
 import { Store } from '@ngrx/store';
 import { map, Subscription, tap } from 'rxjs';
-import { RecipeService } from './../recipe.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -20,7 +19,6 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private recipeService: RecipeService,
     private router: Router,
     private store: Store<AppState>
   ) {}
@@ -49,7 +47,6 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     if (this.editMode) {
-      //this.recipeService.updateRecipe(this.id, this.recipeForm?.value);
       this.store.dispatch(
         RecipeActions.updateRecipe({
           index: this.id,
@@ -57,7 +54,6 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
         })
       );
     } else {
-      //this.recipeService.addRecipe(this.recipeForm?.value);
       this.store.dispatch(
         RecipeActions.addRecipe({ recipe: this.recipeForm.value })
       );
@@ -83,7 +79,6 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     let recipeDescription = '';
     let recipeIngredients = new FormArray<any>([]);
     if (this.editMode) {
-      //const recipe = this.recipeService.getRecipeById(this.id);
       this.storeSub = this.store
         .select('recipes')
         .pipe(

@@ -13,7 +13,6 @@ export class RecipeEffects {
   storeRecipe$ = createEffect(
     () => {
       return this.action$.pipe(
-        //ofType(RecipesActions.STORE_RECIPES),
         ofType(RecipesActions.storeRecipes),
         withLatestFrom(this.store.select('recipes')),
         switchMap(([actionData, recipeState]) => {

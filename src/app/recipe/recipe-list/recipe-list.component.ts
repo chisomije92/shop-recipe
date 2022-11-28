@@ -3,7 +3,6 @@ import { Subscription, map } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RecipeModel } from '../recipe.model';
-import { RecipeService } from '../recipe.service';
 import { AppState } from 'src/app/store-root';
 
 @Component({
@@ -16,7 +15,6 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   subscription?: Subscription;
 
   constructor(
-    private recipeService: RecipeService,
     private route: ActivatedRoute,
     private router: Router,
     private store: Store<AppState>

@@ -54,10 +54,6 @@ export class RecipeDetailComponent implements OnInit {
 
   onAddRecipe() {
     this.router.navigate(['edit'], { relativeTo: this.route });
-    //if (this.recipe) {
-    //  console.log('recipe added');
-    //  this.store.dispatch(new RecipeActions.AddRecipe(this.recipe));
-    //}
   }
 
   onDeleteRecipe() {

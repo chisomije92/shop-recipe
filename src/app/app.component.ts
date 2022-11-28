@@ -1,7 +1,5 @@
 import { AppState } from './store-root/index';
 import { Store } from '@ngrx/store';
-
-import { AuthService } from './auth/auth.service';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import * as AuthActions from './auth/store/auth.actions';
 import { isPlatformBrowser } from '@angular/common';

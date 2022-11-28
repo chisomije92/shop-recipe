@@ -3,7 +3,7 @@ import { User } from './../user.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import * as AuthActions from './auth.actions';
-import { switchMap, catchError, map, of, Observable, tap } from 'rxjs';
+import { switchMap, catchError, map, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
@@ -41,7 +41,6 @@ const handleAuthentication = (resData: AuthResponseData) => {
 const handleError = (errorRes: HttpErrorResponse) => {
   let errorMsg = 'An Unknown Error occurred!';
   if (!errorRes.error || !errorRes.error.error) {
-    //return of(new AuthActions.AuthenticationFail(errorMsg));
     return of(AuthActions.authenticationFail({ error: errorMsg }));
   }
 
@@ -56,7 +55,6 @@ const handleError = (errorRes: HttpErrorResponse) => {
       errorMsg = 'Invalid account: account has been deleted!';
       break;
   }
-  //return of(new AuthActions.AuthenticationFail(errorMsg));
   return of(AuthActions.authenticationFail({ error: errorMsg }));
 };
 
@@ -64,7 +62,6 @@ const handleError = (errorRes: HttpErrorResponse) => {
 export class AuthEffects {
   authSignUp$ = createEffect(() => {
     return this.actions$.pipe(
-      //ofType(AuthActions.SIGNUP_START),
       ofType(AuthActions.signupStart),
       switchMap((signupAction) => {
         return this.http
@@ -94,7 +91,6 @@ export class AuthEffects {
 
   authLogin$ = createEffect(() => {
     return this.actions$.pipe(
-      //ofType(AuthActions.LOGIN_START),
       ofType(AuthActions.loginStart),
       switchMap((authData) => {
         return this.http
@@ -125,7 +121,6 @@ export class AuthEffects {
   authRedirect$ = createEffect(
     () => {
       return this.actions$.pipe(
-        //ofType(AuthActions.AUTHENTICATION_SUCCESS),
         ofType(AuthActions.authenticationSuccess),
         tap((authSuccessAction) => {
           if (authSuccessAction.redirect) {
@@ -139,7 +134,6 @@ export class AuthEffects {
 
   autoLogin$ = createEffect(() => {
     return this.actions$.pipe(
-      //ofType(AuthActions.AUTO_LOGIN),
       ofType(AuthActions.autoLogin),
       map(() => {
         const userStringData = localStorage.getItem('userData');
@@ -181,7 +175,6 @@ export class AuthEffects {
   authLogout$ = createEffect(
     () => {
       return this.actions$.pipe(
-        //ofType(AuthActions.LOGOUT),
         ofType(AuthActions.logout),
         tap(() => {
           localStorage.removeItem('userData');
