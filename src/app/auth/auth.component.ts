@@ -1,6 +1,11 @@
 import { AppState } from './../store-root/index';
 import { Store } from '@ngrx/store';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  FormBuilder,
+} from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import * as AuthActions from './store/auth.actions';
@@ -17,7 +22,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   authForm!: FormGroup;
   storeSub?: Subscription;
 
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: Store<AppState>, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -49,12 +54,9 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   initForm() {
-    this.authForm = new FormGroup({
-      email: new FormControl(null, [Validators.required, Validators.email]),
-      password: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(6),
-      ]),
+    this.authForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
